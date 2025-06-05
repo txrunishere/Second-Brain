@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -b",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npm run build && nodemon dist/index.js\" \"tsc -w\""
+    "dev": "npm run build && nodemon dist/index.js"
   },
   "keywords": [],
   "author": "",

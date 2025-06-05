@@ -10,16 +10,16 @@ interface MyJwtPayload extends JwtPayload {
 
 export const verifyToken = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers?.authorization?.split(" ")[1];
+    const token = req.headers.authorization?.split(" ")[1];
     console.log({ token });
     if (!token) {
       res.status(400).json({
         error: "Token not found!!",
       });
-      return next();
     }
 
     if (token && req.headers.authorization?.startsWith("Bearer ")) {
+      console.log(1)
       return jwt.verify(token, config.jwtSecret, async (err, decoded) => {
         if ( err ) {
           console.log(decoded)
@@ -31,8 +31,9 @@ export const verifyToken = asyncHandler(
         console.log({decoded})
         // @ts-ignore
         const user = await User.findById(decoded.id).select("-password")
-        console.log(user)
+        console.log({user})
         req.user = user
+        next()
       });
     } else {
       res.status(403).json({
