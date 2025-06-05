@@ -21,6 +21,7 @@ export default function Login() {
           withCredentials: true,
         }
       );
+      localStorage.setItem("token", res.data?.token)
       console.log(res.data);
     } catch (error) {
       console.log("E", error);

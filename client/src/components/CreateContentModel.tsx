@@ -1,6 +1,10 @@
 import { useState } from "react";
 import Button from "./Button";
 import { RxCross2 } from "react-icons/rx";
+import axios from "axios";
+import { useNavigate } from "react-router";
+
+const BACKEND_URL = "http://localhost:8080/api/v1";
 
 export default function CreateContentModel({
   isOpen,
@@ -15,8 +19,28 @@ export default function CreateContentModel({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e.target)
-    console.log(postType)
+    try {
+      await fetch(BACKEND_URL + "/content/", {
+        method: "post",
+        credentials: "include",
+        body: JSON.stringify({
+          title,
+          link,
+          type: postType
+        }),
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json"
+        },
+      }).then(() => {
+        setIsOpen(false)
+        setLink("")
+        setPostType("")
+        setTitle("")
+      })
+    } catch (error) {
+      console.log("Error ", error);
+    }
   };
 
   return (
